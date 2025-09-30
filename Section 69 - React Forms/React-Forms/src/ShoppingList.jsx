@@ -4,8 +4,18 @@ import NewItem from "./NewItem";
 
 function ShoppingList({ addItem }) {
   const [formData, setFormData] = useState({ product: "", quantity: 0 });
+  const [isValid, setIsValid] = useState(false);
+
+  const validate = () => {
+    if (formData.product.length === 0) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+  };
 
   const handleChange = (event) => {
+    validate();
     setFormData((currData) => {
       return {
         ...currData,
@@ -35,6 +45,7 @@ function ShoppingList({ addItem }) {
         placeholder="product name"
         value={formData.product}
       />
+      {!isValid && <p style={{ color: "red" }}>Product cannot be Empty</p>}
 
       <label htmlFor="quantity"></label>
       <input
