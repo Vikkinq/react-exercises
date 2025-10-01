@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import NewItem from "./NewItem";
 
@@ -6,8 +7,8 @@ function ShoppingList({ addItem }) {
   const [formData, setFormData] = useState({ product: "", quantity: 0 });
   const [isValid, setIsValid] = useState(false);
 
-  const validate = () => {
-    if (formData.product.length === 0) {
+  const validate = (product) => {
+    if (product.length < 5) {
       setIsValid(false);
     } else {
       setIsValid(true);
@@ -15,7 +16,9 @@ function ShoppingList({ addItem }) {
   };
 
   const handleChange = (event) => {
-    validate();
+    if (event.target.name === "product") {
+      validate(event.target.value);
+    }
     setFormData((currData) => {
       return {
         ...currData,
@@ -26,8 +29,10 @@ function ShoppingList({ addItem }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    addItem(formData);
+    if (isValid) {
+      addItem(formData);
+      setFormData({ product: "", quantity: 0 });
+    }
   };
 
   return (
